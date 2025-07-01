@@ -15,20 +15,7 @@
  * limitations under the License.
  */
 
-// Kotlin has KDoc for generating docs,
-// but currently it cannot be used from gradle plugin.
-// So this script generate javadoc jar with a text file as a workaround.
-// The kotlin-gradle-plugin project includes 'kotlin' plugin
-// and it has KDoc task, but it has Android plugin dependency
-// which causes gradle evaluation errors.
-// To generate docs properly, following tasks might be required:
-//
-//   * Create a gradle plugin to use KDoc task
-//     in kotlin-gradle-plugin-core without Android plugin dependency
-//   * Apply the plugin
-//   * Replace workaround codes with KDoc task
-
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 def isReleaseBuild() {
@@ -54,70 +41,59 @@ def getRepositoryPassword() {
 }
 
 afterEvaluate { project ->
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.release
 
-                pom.groupId = GROUP
-                pom.artifactId = POM_ARTIFACT_ID
-                pom.version = VERSION_NAME
+                groupId = GROUP
+                artifactId = POM_ARTIFACT_ID
+                version = VERSION_NAME
 
-                repository(url: getReleaseRepositoryUrl()) {
-                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-                }
-                snapshotRepository(url: getSnapshotRepositoryUrl()) {
-                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-                }
-
-                pom.project {
-                    name POM_NAME
-                    packaging POM_PACKAGING
-                    description POM_DESCRIPTION
-                    url POM_URL
+                pom {
+                    name = POM_NAME
+                    packaging = POM_PACKAGING
+                    description = POM_DESCRIPTION
+                    url = POM_URL
 
                     scm {
-                        url POM_SCM_URL
-                        connection POM_SCM_CONNECTION
-                        developerConnection POM_SCM_DEV_CONNECTION
+                        url = POM_SCM_URL
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
                     }
 
                     licenses {
                         license {
-                            name POM_LICENCE_NAME
-                            url POM_LICENCE_URL
-                            distribution POM_LICENCE_DIST
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                            distribution = POM_LICENCE_DIST
                         }
                     }
 
                     developers {
                         developer {
-                            id POM_DEVELOPER_ID
-                            name POM_DEVELOPER_NAME
+                            id = POM_DEVELOPER_ID
+                            name = POM_DEVELOPER_NAME
                         }
                     }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = isReleaseBuild() ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
+                credentials {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
                 }
             }
         }
     }
 
     signing {
-        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
-        sign configurations.archives
+        required { isReleaseBuild() && gradle.taskGraph.hasTask("publish") }
+        sign publishing.publications.maven
     }
 
-    task androidJavadocsJar(type: Jar) {
-        classifier = 'javadoc'
-        from 'docs/README.txt'
-    }
-
-    task androidSourcesJar(type: Jar) {
-        classifier = 'sources'
-        from android.sourceSets.main.java.sourceFiles
-    }
-
-    artifacts {
-        archives androidSourcesJar
-        archives androidJavadocsJar
-    }
 }

@@ -21,7 +21,7 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.StateListDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -129,7 +129,7 @@ open class PageControl(context: Context, attrs: AttributeSet) : LinearLayout(con
     public fun setViewPager(viewPager: ViewPager) {
         mViewPager = viewPager
         updateNumOfViews()
-        mViewPager?.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        mViewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
 
@@ -158,12 +158,12 @@ open class PageControl(context: Context, attrs: AttributeSet) : LinearLayout(con
     }
 
     private fun updateNumOfViews() {
-        mNumOfViews = mViewPager?.getAdapter()?.getCount() ?: 0
+        mNumOfViews = mViewPager?.adapter?.count ?: 0
         removeAllViews()
         for (i in 0..mNumOfViews - 1) {
             val b = Button(getContext())
-            setIndicatorBackground(b, i == mViewPager?.getCurrentItem() ?: 0)
-            var isCurrent: Boolean = (i == mViewPager?.getCurrentItem() ?: 0)
+            setIndicatorBackground(b, i == mViewPager?.currentItem ?: 0)
+            var isCurrent: Boolean = (i == mViewPager?.currentItem ?: 0)
             val lp = if (isCurrent) {
                 LinearLayout.LayoutParams(mCurrentIndicatorSize.toInt(), mCurrentIndicatorSize.toInt())
             } else {
