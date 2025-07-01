@@ -14,15 +14,15 @@
   limitations under the License.
 -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.androidpagecontrol.samples.demos">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +31,8 @@
         </activity>
         <activity
             android:name=".DefaultActivity"
-            android:label="@string/activity_title_default">
+            android:label="@string/activity_title_default"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +42,8 @@
         <activity
             android:name=".CustomActivity"
             android:label="@string/activity_title_custom"
-            android:theme="@style/AppTheme.Custom">
+            android:theme="@style/AppTheme.Custom"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +53,8 @@
         <activity
             android:name=".EmphasizedCurrentActivity"
             android:label="@string/activity_title_emphasized_current"
-            android:theme="@style/AppTheme.EmphasizedCurrent">
+            android:theme="@style/AppTheme.EmphasizedCurrent"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +64,8 @@
         <activity
             android:name=".CustomShapeActivity"
             android:label="@string/activity_title_custom_shape"
-            android:theme="@style/AppTheme.Rectangle">
+            android:theme="@style/AppTheme.Rectangle"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

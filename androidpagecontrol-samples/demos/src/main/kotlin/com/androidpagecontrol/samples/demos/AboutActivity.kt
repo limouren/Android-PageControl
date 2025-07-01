@@ -46,8 +46,8 @@ class AboutActivity() : Activity() {
         (findViewById(R.id.version_name) as TextView).setText(getVersionName())
     }
 
-    override fun onOptionsItemSelected(menu: MenuItem?): Boolean {
-        if (menu!!.getItemId() == android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
             finish()
             return true
         }

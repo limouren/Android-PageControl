@@ -38,7 +38,7 @@ class MainActivity() : ListActivity() {
 
     protected override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setListAdapter(SimpleAdapter(this, getData(), R.layout.list_item_main, array("className", "description"), intArray(R.id.className, R.id.description)))
+        setListAdapter(SimpleAdapter(this, getData(), R.layout.list_item_main, arrayOf("className", "description"), intArrayOf(R.id.className, R.id.description)))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -46,15 +46,15 @@ class MainActivity() : ListActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(menu: MenuItem?): Boolean {
-        if (menu!!.getItemId() == R.id.menu_about) {
-            startActivity(Intent(getApplicationContext(), javaClass<AboutActivity>()))
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_about) {
+            startActivity(Intent(getApplicationContext(), AboutActivity::class.java))
             return true
         }
         return false
     }
 
-    private fun getData(): kotlin.List<Map<String, Any>> {
+    private fun getData(): List<Map<String, Any>> {
         val data = ArrayList<Map<String, Any>>()
 
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
@@ -67,12 +67,12 @@ class MainActivity() : ListActivity() {
             return data
         }
 
-        for (i in 0..list.size() - 1) {
+        for (i in 0..list.size - 1) {
             val info = list.get(i)
             val label = info.loadLabel(pm)?.toString() ?: info.activityInfo!!.name
             val labelPath = label!!.split("/")
             val nextLabel = labelPath[0]
-            if (labelPath.size() == 1) {
+            if (labelPath.size == 1) {
                 addItem(data,
                         info.activityInfo!!.name!!.replace(info.activityInfo!!.packageName + ".", ""),
                         nextLabel,
@@ -100,7 +100,7 @@ class MainActivity() : ListActivity() {
         return result
     }
 
-    protected fun addItem(data: kotlin.MutableList<Map<String, Any>>, className: String, description: String, intent: Intent) {
+    protected fun addItem(data: MutableList<Map<String, Any>>, className: String, description: String, intent: Intent) {
         val temp = HashMap<String, Any>()
         temp.put("className", className)
         temp.put("description", description)
@@ -108,7 +108,7 @@ class MainActivity() : ListActivity() {
         data.add(temp)
     }
 
-    SuppressWarnings("unchecked")
+    @Suppress("UNCHECKED_CAST")
     public override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         if (l!!.getItemAtPosition(position) is Map<*, *>) {
             val map = l.getItemAtPosition(position) as Map<*, *>

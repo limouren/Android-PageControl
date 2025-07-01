@@ -1,7 +1,7 @@
 package com.androidpagecontrol.samples.demos;
 
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
